@@ -50,11 +50,23 @@ func (t *Tree) insert(n *Node, v int) {
 }
 
 func (t *Tree) Delete(v int) bool {
+	// 寻找待删除节点
 	pn, n := t.findWithParent(nil, t.root, v)
-	var ns *Node
 	if n == nil {
 		return false
-	} else if n.left == nil && n.right == nil {
+	}
+
+	// 删除节点拥有左右子节点
+	if n.left != nil && n.right != nil {
+		minPn, minN := t.findMinWithParent(n, n.right)
+		n.data = minN.data
+		pn = minPn
+		n = minN
+	}
+
+	// 寻找待连接节点
+	var ns *Node
+	if n.left == nil && n.right == nil {
 		ns = nil
 	} else if n.left == nil {
 		ns = n.right
@@ -62,7 +74,7 @@ func (t *Tree) Delete(v int) bool {
 		ns = n.left
 	}
 
-	// 插入子节点
+	// 连接节点
 	if pn == nil {
 		t.root = ns
 	} else {
@@ -79,14 +91,28 @@ func (t *Tree) Delete(v int) bool {
 func (t *Tree) findWithParent(pn *Node, n *Node, v int) (pno *Node, cno *Node) {
 	if n == nil {
 		return pn, nil
-	} else if v == n.data {
-		return pn, n
-	} else if v < n.data {
-		return t.findWithParent(n, n.left, v)
-	} else {
-		return t.findWithParent(n, n.right, v)
 	}
-	return nil, nil
+
+	if v == n.data {
+		return pn, n
+	}
+
+	pn = n
+	if v < n.data {
+		n = n.left
+	} else {
+		n = n.right
+	}
+
+	return t.findWithParent(pn, n, v)
+}
+
+func (t *Tree) findMinWithParent(pn *Node, n *Node) (pno *Node, cno *Node) {
+	if n.left == nil {
+		return pn, n
+	}
+
+	return t.findMinWithParent(n, n.left)
 }
 
 func (t *Tree) Find(v int) *Node {
@@ -96,14 +122,18 @@ func (t *Tree) Find(v int) *Node {
 func (t *Tree) find(n *Node, v int) *Node {
 	if n == nil {
 		return nil
-	} else if v == n.data {
-		return n
-	} else if v < n.data {
-		return t.find(n.left, v)
-	} else {
-		return t.find(n.right, v)
 	}
-	return nil
+	if v == n.data {
+		return n
+	}
+
+	if v < n.data {
+		n = n.left
+	} else {
+		n = n.right
+	}
+
+	return t.find(n, v)
 }
 
 func (t *Tree) inOrder(n *Node, do func(n *Node)) {

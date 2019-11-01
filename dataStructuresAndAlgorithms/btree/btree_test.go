@@ -32,4 +32,20 @@ func TestInsert(t *testing.T) {
 	t.Log(b.Delete(5))
 	t.Log(b)
 
+	b.Insert(1)
+	b.Insert(5)
+	b.Insert(4)
+	t.Log(b)
+
+	//    3
+	//  2   5
+	//1   4
+
+	t.Log(b.Delete(3))
+	t.Log(b)
+
+	//    4
+	//  2   5
+	//1
+
 }
