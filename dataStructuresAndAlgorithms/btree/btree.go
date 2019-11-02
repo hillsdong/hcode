@@ -166,6 +166,37 @@ func (t *Tree) postOrder(n *Node, do func(n *Node)) {
 	return
 }
 
+func (t *Tree) floorOrder(n *Node, do func(n *Node)) {
+	ns := []*Node{n}
+	fLen, nfLen, fNum := len(ns), 0, 0
+
+	for i := 0; i < len(ns); i++ {
+		if ns[i] == nil {
+			break
+		}
+		if nfLen == 0 {
+			fmt.Printf("\n n%d: ", fNum+1)
+		}
+		do(ns[i])
+		fmt.Printf("%d ", ns[i].data)
+		fLen--
+		if ns[i].left != nil {
+			ns = append(ns, ns[i].left)
+			nfLen++
+		}
+		if ns[i].right != nil {
+			ns = append(ns, ns[i].right)
+			nfLen++
+		}
+		if fLen == 0 {
+			fNum++
+			fLen, nfLen = nfLen, 0
+		}
+	}
+	fmt.Println("")
+	return
+}
+
 func (t *Tree) String() string {
 	var buffer bytes.Buffer
 	buffer.WriteString(fmt.Sprintf("BTree: Lenght = %d, ", t.len))
@@ -184,6 +215,10 @@ func (t *Tree) String() string {
 
 	buffer.WriteString("PostOrder = [")
 	t.postOrder(t.root, bufferWriteString)
+	buffer.WriteString("]")
+
+	buffer.WriteString("FloorOrder = [")
+	t.floorOrder(t.root, bufferWriteString)
 	buffer.WriteString("]")
 
 	return buffer.String()

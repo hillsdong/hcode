@@ -7,7 +7,7 @@ import "testing"
 // 2   4
 //       5
 
-func TestInsert(t *testing.T) {
+func TestOperate(t *testing.T) {
 	b := New()
 	t.Log(b.Delete(5))
 	t.Log(b)
