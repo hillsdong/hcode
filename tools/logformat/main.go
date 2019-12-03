@@ -1,11 +1,12 @@
 package main
+
 import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 )
+
 type log struct {
 	Lang       string      `json:"lang"`
 	App        string      `json:"app"`
@@ -26,6 +27,7 @@ type log struct {
 	Detail     interface{} `json:"detail"`
 	Trace      interface{} `json:"trace"`
 }
+
 func main() {
 	_, err := os.Stdin.Stat()
 	if err != nil {
@@ -33,24 +35,20 @@ func main() {
 	}
 	js := new(log)
 	fmt.Println("==================== LOG-FMT ==================")
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		line, _, err := reader.ReadLine()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			fmt.Printf("error: %s\n", err)
-			break
-		}
+	consolescanner := bufio.NewScanner(os.Stdin)
+	for consolescanner.Scan() {
+		line := consolescanner.Bytes()
 		err = json.Unmarshal(line, js)
 		if err != nil {
 			fmt.Printf("error: %s\n", err)
-		}else{
-                	fmt.Printf("%s | %s | %s \n", Green(js.T), js.Rid, js.IP)
-                	fmt.Printf("%s | %s \n", Green(js.Method), js.Uri)
-			fmt.Printf("%s | %s | %s | %s | %s \n", Green(js.Level), js.Controller, js.Action, js.Category, js.Caller)
-			fmt.Printf("%s %s \n", Green(js.Msg), js.Detail)
+			break
 		}
+
+		fmt.Printf("%s | %s | %s \n", Green(js.T), js.Rid, js.IP)
+		fmt.Printf("%s | %s \n", Green(js.Method), js.Uri)
+		fmt.Printf("%s | %s | %s | %s | %s \n", Green(js.Level), js.Controller, js.Action, js.Category, js.Caller)
+		fmt.Printf("%s %s \n", Green(js.Msg), js.Detail)
+
 		fmt.Println("===============================================")
 	}
 }
