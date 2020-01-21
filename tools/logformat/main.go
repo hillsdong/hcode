@@ -41,7 +41,7 @@ func main() {
 		err = json.Unmarshal(line, js)
 		if err != nil {
 			fmt.Printf("error: %s\n", err)
-			break
+			continue
 		}
 
 		fmt.Printf("%s | %s | %s \n", Green(js.T), js.Rid, js.IP)
