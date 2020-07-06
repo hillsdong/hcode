@@ -1,28 +1,23 @@
-package sorttest
+package sorttest2
 
+// 2min
 func Bubble(nums []int) []int {
 	len := len(nums)
 	if len <= 1 {
 		return nums
 	}
 
-	var f bool
 	for i := len; i > 0; i-- {
-		f = false
 		for j := 1; j < i; j++ {
 			if nums[j-1] > nums[j] {
-				f = true
 				nums[j-1], nums[j] = nums[j], nums[j-1]
 			}
 		}
-		if !f {
-			break
-		}
 	}
-
 	return nums
 }
 
+// 3min
 func Insertion(nums []int) []int {
 	len := len(nums)
 	if len <= 1 {
@@ -39,14 +34,12 @@ func Insertion(nums []int) []int {
 				break
 			}
 		}
-		if j != i {
-			nums[j] = v
-		}
+		nums[j] = v
 	}
-
 	return nums
 }
 
+// 4min
 func Selection(nums []int) []int {
 	len := len(nums)
 	if len <= 1 {
@@ -60,14 +53,12 @@ func Selection(nums []int) []int {
 				min = j
 			}
 		}
-		if min != i {
-			nums[min], nums[i] = nums[i], nums[min]
-		}
+		nums[i], nums[min] = nums[min], nums[i]
 	}
-
 	return nums
 }
 
+// 10min
 func Merge(nums []int) []int {
 	_Merge(nums, 0, len(nums)-1)
 	return nums
@@ -80,10 +71,12 @@ func _Merge(nums []int, p int, r int) {
 	}
 
 	q := p + (r-p)/2
+
 	_Merge(nums, p, q)
 	_Merge(nums, q+1, r)
 
 	_nums, k, i, j := make([]int, len), 0, p, q+1
+
 	for ; i <= q && j <= r; k++ {
 		if nums[i] < nums[j] {
 			_nums[k] = nums[i]
@@ -94,23 +87,23 @@ func _Merge(nums []int, p int, r int) {
 		}
 	}
 
-	for ; i <= q; i++ {
+	for ; i <= q; k++ {
 		_nums[k] = nums[i]
-		k++
+		i++
 	}
 
-	for ; j <= r; j++ {
+	for ; j <= r; k++ {
 		_nums[k] = nums[j]
-		k++
+		j++
 	}
 
 	for i := 0; i < k; i++ {
 		nums[p+i] = _nums[i]
 	}
-
 	return
 }
 
+// 14min
 func Quick(nums []int) []int {
 	_Quick(nums, 0, len(nums)-1)
 	return nums
@@ -129,10 +122,9 @@ func _Quick(nums []int, p int, r int) {
 			q++
 		}
 	}
-	nums[r], nums[q] = nums[q], nums[r]
+	nums[q], nums[r] = nums[r], nums[q]
 
 	_Quick(nums, p, q-1)
 	_Quick(nums, q+1, r)
-
 	return
 }

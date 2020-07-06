@@ -1,6 +1,7 @@
 package math
 
 import "fmt"
+
 //Q01 求一个整数的二进制表示
 func Q01(decimal int64) string {
 	var ret string
@@ -10,6 +11,8 @@ func Q01(decimal int64) string {
 		ret = fmt.Sprint(b) + ret
 
 		decimal = decimal >> 1
+
 	}
+
 	return ret
 }

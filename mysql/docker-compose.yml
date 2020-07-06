@@ -5,6 +5,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=xiaobaitu2
     volumes:
+      - ./cf1:/etc/mysql
       - ./data1:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
@@ -14,9 +15,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=xiaobaitu2
     volumes:
+      - ./cf2:/etc/mysql
       - ./data2:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
 
 
 networks: {default: {external: {name: learn}}}
+# alias mysql='docker run --rm --network learn --link mysql_db1_1:db1 --link mysql_db2_1:db2 -it arey/mysql-client'
