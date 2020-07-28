@@ -23,4 +23,6 @@ spec:
           name: nginx-vol
       volumes:
       - name: nginx-vol
-        emptyDir: {}
+        #emptyDir: {}
+        hostPath:
+          path: "/tmp/nginx"

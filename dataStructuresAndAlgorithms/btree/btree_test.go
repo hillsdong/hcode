@@ -1,6 +1,8 @@
 package btree
 
-import "testing"
+import (
+	"testing"
+)
 
 // 1
 //   3
