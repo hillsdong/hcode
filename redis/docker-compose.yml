@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db1:
+    image: redis:4.0
+    volumes:
+      - ./cf1:/usr/local/etc/redis
+      - ./data1:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+
+  db2:
+    image: redis:4.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=xiaobaitu2
+    volumes:
+      - ./cf2:/usr/local/etc/redis
+      - ./data2:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+
+
+networks: {default: {external: {name: learn}}}
+#alias redis='docker run -it --network learn --link redis_db1_1:db1 --link redis_db2_1:db2 --rm redis redis-cli'
