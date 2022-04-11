@@ -49,6 +49,7 @@ func download(url string) error {
 		return err
 	}
 	//
+	hasNew := false
 	for _, v := range rss.Channel.Item {
 		format := getFormat(v.Enclosure.URL)
 		path := fmt.Sprintf("%s/%s.%s", rss.Channel.Title, v.Title, format)
@@ -56,6 +57,15 @@ func download(url string) error {
 		if err := save(v.Enclosure.URL, path); err != nil {
 			logErr(err)
 			continue
+		}
+		hasNew = true
+	}
+	//
+	if hasNew {
+		path := fmt.Sprintf("%s/rss.xml", rss.Channel.Title)
+		fmt.Println(fmt.Sprintf("download: %s", path))
+		if err := save(url, path); err != nil {
+			logErr(err)
 		}
 	}
 	return nil
@@ -146,6 +156,9 @@ func getUrls() ([]string, error) {
 		a, _, c := br.ReadLine()
 		if c == io.EOF {
 			break
+		}
+		if !strings.HasPrefix(strings.ToLower(string(a)), "http") {
+			continue
 		}
 		urls = append(urls, string(a))
 	}
